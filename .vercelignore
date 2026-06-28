@@ -1,0 +1,3 @@
+# Exclude the old local-dev Express entry point from Vercel deployment.
+# Vercel uses api/stocks/price.js (file-based serverless function) instead.
+api/index.js
