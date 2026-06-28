@@ -1,14 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Supabase project credentials — anon key is safe to ship publicly.
+// Row Level Security (RLS) ensures every user only sees their own data.
+const supabaseUrl = 'https://yeubhcexwlalxcttddkq.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlldWJoY2V4d2xhbHhjdHRkZGtxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2MjYyMTcsImV4cCI6MjA5ODIwMjIxN30.VCU2VKl-wu-QYc3Xr3-XpiUic1OwB0-GBeqlkyCfMCU';
 
-const isSupabaseConfigured = !!(supabaseUrl && supabaseAnonKey);
-
-let supabase = null;
-if (isSupabaseConfigured) {
-  supabase = createClient(supabaseUrl, supabaseAnonKey);
-}
+const isSupabaseConfigured = true;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // -------------------------------------------------------------
 // LOCAL STORAGE MOCK DATABASE (Fallback mode)
