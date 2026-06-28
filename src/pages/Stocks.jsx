@@ -365,7 +365,7 @@ export default function Stocks() {
     return {
       profile,
       companies: profileComps,
-      totalProfit
+      totalProfit: profileProfit
     };
   });
 

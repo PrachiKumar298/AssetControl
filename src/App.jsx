@@ -23,15 +23,13 @@ export default function App() {
     });
 
     // Listen for auth state changes
-    const subscription = dbClient.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = dbClient.auth.onAuthStateChange((event, session) => {
       setUser(session?.user || null);
       setLoading(false);
     });
 
     return () => {
-      if (subscription && typeof subscription.unsubscribe === 'function') {
-        subscription.unsubscribe();
-      }
+      subscription?.unsubscribe();
     };
   }, []);
 
