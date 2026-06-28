@@ -11,19 +11,38 @@ import RealEstate from './pages/RealEstate';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 
+// ─── ProtectedLayout must live OUTSIDE App ───────────────────────────────────
+// Defining it inside App() creates a new component reference on every render,
+// causing React to fully unmount+remount every page on each auth state change —
+// which produces blank pages when navigating.
+function ProtectedLayout({ user, onSignOut, children }) {
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  return (
+    <div className="min-h-screen bg-[#FEFDDF] text-brand-dark flex flex-col md:flex-row">
+      <Navigation user={user} onSignOut={onSignOut} />
+      <main className="flex-1 md:pl-64 min-w-0 transition-all duration-300">
+        {children}
+      </main>
+    </div>
+  );
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 export default function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check initial session
+    // Check existing session on mount
     dbClient.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user || null);
       setLoading(false);
     });
 
-    // Listen for auth state changes
-    const { data: { subscription } } = dbClient.auth.onAuthStateChange((event, session) => {
+    // Subscribe to future auth state changes (sign-in / sign-out)
+    const { data: { subscription } } = dbClient.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user || null);
       setLoading(false);
     });
@@ -44,85 +63,72 @@ export default function App() {
     );
   }
 
-  const ProtectedLayout = ({ children }) => {
-    if (!user) {
-      return <Navigate to="/login" replace />;
-    }
-
-    return (
-      <div className="min-h-screen bg-[#FEFDDF] text-brand-dark flex flex-col md:flex-row">
-        <Navigation user={user} onSignOut={() => setUser(null)} />
-        <main className="flex-1 md:pl-64 min-w-0 transition-all duration-300">
-          {children}
-        </main>
-      </div>
-    );
-  };
+  const handleSignOut = () => setUser(null);
 
   return (
     <BrowserRouter>
       <Routes>
         {/* Public auth pages */}
-        <Route 
-          path="/login" 
-          element={user ? <Navigate to="/" replace /> : <Login onSignIn={setUser} />} 
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/" replace /> : <Login onSignIn={setUser} />}
         />
-        <Route 
-          path="/signup" 
-          element={user ? <Navigate to="/" replace /> : <SignUp />} 
+        <Route
+          path="/signup"
+          element={user ? <Navigate to="/" replace /> : <SignUp />}
         />
 
         {/* Private wealth tracker pages */}
-        <Route 
-          path="/" 
+        <Route
+          path="/"
           element={
-            <ProtectedLayout>
+            <ProtectedLayout user={user} onSignOut={handleSignOut}>
               <Dashboard />
             </ProtectedLayout>
-          } 
+          }
         />
-        <Route 
-          path="/stocks" 
+        <Route
+          path="/stocks"
           element={
-            <ProtectedLayout>
+            <ProtectedLayout user={user} onSignOut={handleSignOut}>
               <Stocks />
             </ProtectedLayout>
-          } 
+          }
         />
-        <Route 
-          path="/bank" 
+        <Route
+          path="/bank"
           element={
-            <ProtectedLayout>
+            <ProtectedLayout user={user} onSignOut={handleSignOut}>
               <Bank />
             </ProtectedLayout>
-          } 
+          }
         />
-        <Route 
-          path="/ppf" 
+        <Route
+          path="/ppf"
           element={
-            <ProtectedLayout>
+            <ProtectedLayout user={user} onSignOut={handleSignOut}>
               <PPF />
             </ProtectedLayout>
-          } 
+          }
         />
-        <Route 
-          path="/nps" 
+        <Route
+          path="/nps"
           element={
-            <ProtectedLayout>
+            <ProtectedLayout user={user} onSignOut={handleSignOut}>
               <NPS />
             </ProtectedLayout>
-          } 
+          }
         />
-        <Route 
-          path="/real-estate" 
+        <Route
+          path="/real-estate"
           element={
-            <ProtectedLayout>
+            <ProtectedLayout user={user} onSignOut={handleSignOut}>
               <RealEstate />
             </ProtectedLayout>
-          } 
+          }
         />
 
-        {/* Catch-all redirection */}
+        {/* Catch-all */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
