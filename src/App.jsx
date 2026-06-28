@@ -50,6 +50,7 @@ export default function App() {
     if (!user) {
       return <Navigate to="/login" replace />;
     }
+
     return (
       <div className="min-h-screen bg-[#FEFDDF] text-brand-dark flex flex-col md:flex-row">
         <Navigation user={user} onSignOut={() => setUser(null)} />

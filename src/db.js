@@ -1,12 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Supabase project credentials — anon key is safe to ship publicly.
-// Row Level Security (RLS) ensures every user only sees their own data.
-const supabaseUrl = 'https://yeubhcexwlalxcttddkq.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlldWJoY2V4d2xhbHhjdHRkZGtxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2MjYyMTcsImV4cCI6MjA5ODIwMjIxN30.VCU2VKl-wu-QYc3Xr3-XpiUic1OwB0-GBeqlkyCfMCU';
+// Prefer the built-in local fallback unless Supabase credentials are explicitly provided.
+// This keeps the app usable in local development and prevents blank pages when the
+// remote session layer is unavailable or misconfigured.
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://yeubhcexwlalxcttddkq.supabase.co';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-const isSupabaseConfigured = true;
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const isSupabaseConfigured = Boolean(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
+const supabase = isSupabaseConfigured ? createClient(supabaseUrl, supabaseAnonKey) : null;
 
 // -------------------------------------------------------------
 // LOCAL STORAGE MOCK DATABASE (Fallback mode)
@@ -87,12 +88,8 @@ const mockAuth = {
     const db = getLocalStorageDB();
     callback(db.session ? 'SIGNED_IN' : 'SIGNED_OUT', db.session);
     return {
-      data: {
-        subscription: {
-          unsubscribe: () => {
-            authCallbacks = authCallbacks.filter(cb => cb !== callback);
-          }
-        }
+      unsubscribe: () => {
+        authCallbacks = authCallbacks.filter(cb => cb !== callback);
       }
     };
   }
