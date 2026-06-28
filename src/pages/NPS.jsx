@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { dbClient } from '../db';
-import { FileText, Plus, Trash2, Save, Check, AlertCircle } from 'lucide-react';
+import ProfileCreator from '../components/ProfileCreator';
+import { FileText, Trash2, Save, Check, AlertCircle } from 'lucide-react';
 
 export default function NPS() {
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [newProfileName, setNewProfileName] = useState('');
   const [editStates, setEditStates] = useState({}); // { profileId: { name, nps_invested, nps_current } }
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
@@ -40,23 +40,9 @@ export default function NPS() {
     }
   };
 
-  const handleCreateProfile = async (e) => {
-    e.preventDefault();
-    if (!newProfileName.trim()) return;
-    setError('');
-    setSuccessMsg('');
-    try {
-      const { data, error: err } = await dbClient.profiles.create(newProfileName.trim());
-      if (err) {
-        setError(err.message);
-      } else {
-        setNewProfileName('');
-        setSuccessMsg('Profile created successfully.');
-        fetchProfiles();
-      }
-    } catch (err) {
-      setError('Failed to create profile.');
-    }
+  const handleProfileCreated = () => {
+    setSuccessMsg('Profile created — it is now available in all sections.');
+    fetchProfiles();
   };
 
   const handleInputChange = (profileId, field, value) => {
@@ -150,27 +136,11 @@ export default function NPS() {
         </div>
       )}
 
-      {/* Profile Creator Form */}
-      <div className="bg-white border border-brand-border/60 p-5 rounded-2xl shadow-xs">
-        <h3 className="text-sm font-semibold text-brand-dark/70 mb-3">Create New Investment Profile</h3>
-        <form onSubmit={handleCreateProfile} className="flex flex-col sm:flex-row gap-3">
-          <input
-            type="text"
-            placeholder="e.g. Retirement, Self, Spouse"
-            value={newProfileName}
-            onChange={(e) => setNewProfileName(e.target.value)}
-            className="flex-1 text-sm rounded-xl px-4 py-3"
-            required
-          />
-          <button
-            type="submit"
-            className="flex items-center justify-center space-x-2 bg-brand-orange hover:bg-brand-orange/95 text-white font-semibold px-6 py-3 rounded-xl shadow-md shadow-brand-orange/20 transition-all duration-200 text-sm"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Create Profile</span>
-          </button>
-        </form>
-      </div>
+      {/* Profile Creator */}
+      <ProfileCreator
+        onCreated={handleProfileCreated}
+        onError={(msg) => setError(msg)}
+      />
 
       {loading ? (
         <div className="text-center py-12 text-brand-dark/50">Loading NPS profiles...</div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { dbClient } from '../db';
+import ProfileCreator from '../components/ProfileCreator';
 import { Home, Plus, Trash2, Save, Check, AlertCircle } from 'lucide-react';
 
 export default function RealEstate() {
@@ -52,6 +53,13 @@ export default function RealEstate() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleProfileCreated = (newProfile) => {
+    setSuccessMsg('Profile created — it is now available in all sections.');
+    fetchData();
+    // auto-select the newly created profile
+    if (newProfile?.id) setSelectedProfileId(newProfile.id);
   };
 
   const handleAddProperty = async (e) => {
@@ -180,7 +188,13 @@ export default function RealEstate() {
         </div>
       )}
 
-      {/* Add Real Estate Form */}
+      {/* Profile Creator — always visible so users can create profiles here too */}
+      <ProfileCreator
+        onCreated={handleProfileCreated}
+        onError={(msg) => setError(msg)}
+      />
+
+      {/* Add Real Estate Form — only shown when profiles exist */}
       {profiles.length > 0 && (
         <div className="bg-white border border-brand-border/60 p-5 rounded-2xl shadow-xs">
           <h3 className="text-sm font-semibold text-brand-dark/70 mb-4">Add Real Estate Property</h3>

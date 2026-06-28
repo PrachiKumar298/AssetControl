@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { dbClient } from '../db';
+import ProfileCreator from '../components/ProfileCreator';
 import { TrendingUp, Plus, Trash2, Save, Check, AlertCircle, RefreshCw, ArrowUpRight, ArrowDownRight, Search } from 'lucide-react';
 import axios from 'axios';
 
@@ -105,6 +106,12 @@ export default function Stocks() {
     } catch (err) {
       setError('Failed to update profile name.');
     }
+  };
+
+  const handleProfileCreated = (newProfile) => {
+    setSuccessMsg('Profile created — it is now available in all sections.');
+    fetchData();
+    if (newProfile?.id) setSelectedProfileId(newProfile.id);
   };
 
   const handleRefreshPrices = async () => {
@@ -477,7 +484,15 @@ export default function Stocks() {
         </div>
       </div>
 
-      {/* Add Stock Form (only visible in Personal view) */}
+      {/* Profile Creator — always show so users can create profiles from Stocks page */}
+      {activeTab === 'personal' && (
+        <ProfileCreator
+          onCreated={handleProfileCreated}
+          onError={(msg) => setError(msg)}
+        />
+      )}
+
+      {/* Add Stock Form (only visible in Personal view when profiles exist) */}
       {activeTab === 'personal' && profiles.length > 0 && (
         <div className="bg-white border border-brand-border/60 p-5 rounded-2xl shadow-xs">
           <h3 className="text-sm font-semibold text-brand-dark/70 mb-4">Add Company Holding</h3>
