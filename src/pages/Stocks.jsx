@@ -633,7 +633,7 @@ export default function Stocks() {
                           )}
                         </div>
                         <span className={`text-sm font-semibold px-3 py-1 rounded-full ${profileProfit >= 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}>
-                          Profile P&L: {profileProfit >= 0 ? '+' : ''}${profileProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          Profile P&L: {profileProfit >= 0 ? '+' : ''}₹{profileProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                       </div>
 
@@ -701,7 +701,7 @@ export default function Stocks() {
                                     </td>
                                     <td className="table-row-cell font-mono">
                                       <div className="flex items-center space-x-0.5">
-                                        <span className="text-brand-dark/40 text-xs">$</span>
+                                        <span className="text-brand-dark/40 text-xs">₹</span>
                                         <input
                                           type="number"
                                           step="0.0001"
@@ -721,11 +721,11 @@ export default function Stocks() {
                                       />
                                     </td>
                                     <td className="table-row-cell font-mono text-xs">
-                                      ${parseFloat(c.current_price).toFixed(2)}
+                                      ₹{parseFloat(c.current_price).toFixed(2)}
                                     </td>
                                     <td className="table-row-cell font-mono font-semibold">
                                       <span className={profit >= 0 ? 'text-emerald-600' : 'text-red-600'}>
-                                        {profit >= 0 ? '+' : ''}${profit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                        {profit >= 0 ? '+' : ''}₹{profit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                       </span>
                                     </td>
                                     <td className="table-row-cell text-center">
@@ -766,7 +766,7 @@ export default function Stocks() {
                   <div className="flex justify-between items-center px-1">
                     <h3 className="text-lg font-bold text-brand-dark font-sans">Compounded Statement (Aggregated)</h3>
                     <span className={`text-sm font-semibold px-3 py-1 rounded-full ${totalCompoundedProfit >= 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}>
-                      Total Compounded Profit: {totalCompoundedProfit >= 0 ? '+' : ''}${totalCompoundedProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      Total Compounded Profit: {totalCompoundedProfit >= 0 ? '+' : ''}₹{totalCompoundedProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
 
@@ -802,14 +802,14 @@ export default function Stocks() {
                                 {item.total_quantity.toFixed(4)}
                               </td>
                               <td className="table-row-cell font-mono">
-                                ${item.avg_price.toFixed(4)}
+                                ₹{item.avg_price.toFixed(4)}
                               </td>
                               <td className="table-row-cell font-mono">
-                                ${item.current_price.toFixed(2)}
+                                ₹{item.current_price.toFixed(2)}
                               </td>
                               <td className="table-row-cell font-mono font-bold">
                                 <span className={item.profit >= 0 ? 'text-emerald-600' : 'text-red-600'}>
-                                  {item.profit >= 0 ? '+' : ''}${item.profit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                  {item.profit >= 0 ? '+' : ''}₹{item.profit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </span>
                               </td>
                             </tr>
@@ -823,7 +823,7 @@ export default function Stocks() {
                             <td className="table-row-cell" colSpan="3"></td>
                             <td className="table-row-cell font-mono font-extrabold text-brand-orange">
                               <span className={totalCompoundedProfit >= 0 ? 'text-emerald-600' : 'text-red-600'}>
-                                {totalCompoundedProfit >= 0 ? '+' : ''}${totalCompoundedProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                {totalCompoundedProfit >= 0 ? '+' : ''}₹{totalCompoundedProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                               </span>
                             </td>
                           </tr>
@@ -887,11 +887,11 @@ export default function Stocks() {
                 </div>
                 <div className="flex justify-between">
                   <span>Current Avg Price:</span>
-                  <span className="font-mono font-semibold">${parseFloat(selectedCompany.avg_price).toFixed(2)}</span>
+                  <span className="font-mono font-semibold">₹{parseFloat(selectedCompany.avg_price).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Current Live Price:</span>
-                  <span className="font-mono font-semibold">${parseFloat(selectedCompany.current_price).toFixed(2)}</span>
+                  <span className="font-mono font-semibold">₹{parseFloat(selectedCompany.current_price).toFixed(2)}</span>
                 </div>
               </div>
 
@@ -913,7 +913,7 @@ export default function Stocks() {
 
                 <div className="flex flex-col space-y-1">
                   <label className="text-xs font-semibold text-brand-dark/60">
-                    Transaction Price per Share ($)
+                    Transaction Price per Share (₹)
                   </label>
                   <input
                     type="number"

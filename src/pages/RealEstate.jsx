@@ -285,7 +285,7 @@ export default function RealEstate() {
                   <div className="flex justify-between items-center px-1">
                     <h3 className="text-lg font-bold text-brand-dark">{profile.name}'s Real Estate Portfolio</h3>
                     <span className={`text-sm font-semibold px-3 py-1 rounded-full ${profileProfit >= 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}>
-                      Total Profit: {profileProfit >= 0 ? '+' : ''}${profileProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      Total Profit: {profileProfit >= 0 ? '+' : ''}₹{profileProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
 
@@ -328,7 +328,7 @@ export default function RealEstate() {
                                 </td>
                                 <td className="table-row-cell">
                                   <div className="flex items-center space-x-1">
-                                    <span className="text-brand-dark/40 font-mono text-sm">$</span>
+                                    <span className="text-brand-dark/40 font-mono text-sm">₹</span>
                                     <input
                                       type="number"
                                       step="0.01"
@@ -340,7 +340,7 @@ export default function RealEstate() {
                                 </td>
                                 <td className="table-row-cell">
                                   <div className="flex items-center space-x-1">
-                                    <span className="text-brand-dark/40 font-mono text-sm">$</span>
+                                    <span className="text-brand-dark/40 font-mono text-sm">₹</span>
                                     <input
                                       type="number"
                                       step="0.01"
@@ -352,7 +352,7 @@ export default function RealEstate() {
                                 </td>
                                 <td className="table-row-cell font-mono font-semibold">
                                   <span className={profit >= 0 ? 'text-emerald-600' : 'text-red-600'}>
-                                    {profit >= 0 ? '+' : ''}${profit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    {profit >= 0 ? '+' : ''}₹{profit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                   </span>
                                 </td>
                                 <td className="table-row-cell text-center">
@@ -382,11 +382,11 @@ export default function RealEstate() {
                         {properties.length > 0 && (
                           <tr className="bg-brand-blue/5 font-semibold text-brand-dark/80">
                             <td className="table-row-cell font-bold">Total</td>
-                            <td className="table-row-cell font-mono">${profileInvested.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                            <td className="table-row-cell font-mono">${profileCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                            <td className="table-row-cell font-mono">₹{profileInvested.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                            <td className="table-row-cell font-mono">₹{profileCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
                             <td className="table-row-cell font-mono" colSpan="2">
                               <span className={profileProfit >= 0 ? 'text-emerald-600' : 'text-red-600'}>
-                                {profileProfit >= 0 ? '+' : ''}${profileProfit.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                                {profileProfit >= 0 ? '+' : ''}₹{profileProfit.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                               </span>
                             </td>
                           </tr>
@@ -418,14 +418,14 @@ export default function RealEstate() {
                       {realEstate.length} Properties
                     </td>
                     <td className="table-row-cell font-mono text-brand-orange">
-                      ${grandTotalInvested.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ₹{grandTotalInvested.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
                     <td className="table-row-cell font-mono text-brand-orange">
-                      ${grandTotalCurrent.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ₹{grandTotalCurrent.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
                     <td className="table-row-cell font-mono font-extrabold">
                       <span className={grandTotalProfit >= 0 ? 'text-emerald-600' : 'text-red-600'}>
-                        {grandTotalProfit >= 0 ? '+' : ''}${grandTotalProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        {grandTotalProfit >= 0 ? '+' : ''}₹{grandTotalProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
                     </td>
                   </tr>

@@ -174,7 +174,7 @@ export default function Bank() {
                           </td>
                           <td className="table-row-cell">
                             <div className="flex items-center space-x-1">
-                              <span className="text-brand-dark/40 font-mono text-sm">$</span>
+                              <span className="text-brand-dark/40 font-mono text-sm">₹</span>
                               <input
                                 type="number"
                                 step="0.01"
@@ -230,7 +230,7 @@ export default function Bank() {
                       {profiles.length} Profiles
                     </td>
                     <td className="table-row-cell text-lg font-mono font-extrabold text-brand-orange">
-                      ${totalBankAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ₹{totalBankAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
                   </tr>
                 </tbody>

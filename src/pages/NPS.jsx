@@ -192,7 +192,7 @@ export default function NPS() {
                           </td>
                           <td className="table-row-cell">
                             <div className="flex items-center space-x-1">
-                              <span className="text-brand-dark/40 font-mono text-sm">$</span>
+                              <span className="text-brand-dark/40 font-mono text-sm">₹</span>
                               <input
                                 type="number"
                                 step="0.01"
@@ -204,7 +204,7 @@ export default function NPS() {
                           </td>
                           <td className="table-row-cell">
                             <div className="flex items-center space-x-1">
-                              <span className="text-brand-dark/40 font-mono text-sm">$</span>
+                              <span className="text-brand-dark/40 font-mono text-sm">₹</span>
                               <input
                                 type="number"
                                 step="0.01"
@@ -216,7 +216,7 @@ export default function NPS() {
                           </td>
                           <td className="table-row-cell font-mono font-semibold">
                             <span className={profit >= 0 ? 'text-emerald-600' : 'text-red-600'}>
-                              {profit >= 0 ? '+' : ''}${profit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                              {profit >= 0 ? '+' : ''}₹{profit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </span>
                           </td>
                           <td className="table-row-cell text-center">
@@ -267,14 +267,14 @@ export default function NPS() {
                       {profiles.length} Accounts
                     </td>
                     <td className="table-row-cell font-mono text-brand-orange">
-                      ${totalInvested.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ₹{totalInvested.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
                     <td className="table-row-cell font-mono text-brand-orange">
-                      ${totalCurrent.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ₹{totalCurrent.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
                     <td className="table-row-cell font-mono font-extrabold">
                       <span className={totalProfit >= 0 ? 'text-emerald-600' : 'text-red-600'}>
-                        {totalProfit >= 0 ? '+' : ''}${totalProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        {totalProfit >= 0 ? '+' : ''}₹{totalProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
                     </td>
                   </tr>

@@ -206,7 +206,7 @@ export default function Dashboard() {
           label: (context) => {
             const val = context.raw || 0;
             const pct = grandTotal > 0 ? ((val / grandTotal) * 100).toFixed(1) : 0;
-            return ` $${val.toLocaleString('en-US', { maximumFractionDigits: 0 })} (${pct}%)`;
+            return ` ₹${val.toLocaleString('en-US', { maximumFractionDigits: 0 })} (${pct}%)`;
           }
         }
       }
@@ -218,7 +218,7 @@ export default function Dashboard() {
     labels: profileSummaryRows.map(r => r.name),
     datasets: [
       {
-        label: 'Current Asset Value ($)',
+        label: 'Current Asset Value (₹)',
         data: profileSummaryRows.map(r => r.rowTotal),
         backgroundColor: '#73A5CA',
         hoverBackgroundColor: '#E87F24',
@@ -248,7 +248,7 @@ export default function Dashboard() {
     scales: {
       y: {
         ticks: {
-          callback: (value) => `$${value.toLocaleString()}`
+          callback: (value) => `₹${value.toLocaleString()}`
         }
       }
     }
@@ -296,7 +296,7 @@ export default function Dashboard() {
               <div>
                 <span className="text-xs font-semibold text-brand-dark/50 uppercase tracking-wider block">Net Worth (Current)</span>
                 <span className="text-2xl font-bold text-brand-dark font-mono">
-                  ${grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  ₹{grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
               </div>
             </div>
@@ -308,7 +308,7 @@ export default function Dashboard() {
               <div>
                 <span className="text-xs font-semibold text-brand-dark/50 uppercase tracking-wider block">Invested Equities</span>
                 <span className="text-2xl font-bold text-brand-dark font-mono">
-                  ${totalStocksCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  ₹{totalStocksCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </span>
               </div>
             </div>
@@ -320,7 +320,7 @@ export default function Dashboard() {
               <div>
                 <span className="text-xs font-semibold text-brand-dark/50 uppercase tracking-wider block">Cash & Liquidity</span>
                 <span className="text-2xl font-bold text-brand-dark font-mono">
-                  ${totalBankCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  ₹{totalBankCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </span>
               </div>
             </div>
@@ -403,11 +403,11 @@ export default function Dashboard() {
                             {r.name}
                           </td>
                           <td className="table-row-cell font-mono text-xs text-brand-dark/70">
-                            ${r.stocksVal.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                             ₹{r.stocksVal.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                           </td>
                           <td className="table-row-cell">
                             <div className="flex items-center space-x-0.5">
-                              <span className="text-brand-dark/40 text-xs">$</span>
+                              <span className="text-brand-dark/40 text-xs">₹</span>
                               <input
                                 type="number"
                                 step="0.01"
@@ -419,7 +419,7 @@ export default function Dashboard() {
                           </td>
                           <td className="table-row-cell">
                             <div className="flex items-center space-x-0.5">
-                              <span className="text-brand-dark/40 text-xs">$</span>
+                              <span className="text-brand-dark/40 text-xs">₹</span>
                               <input
                                 type="number"
                                 step="0.01"
@@ -431,7 +431,7 @@ export default function Dashboard() {
                           </td>
                           <td className="table-row-cell">
                             <div className="flex items-center space-x-0.5">
-                              <span className="text-brand-dark/40 text-xs">$</span>
+                              <span className="text-brand-dark/40 text-xs">₹</span>
                               <input
                                 type="number"
                                 step="0.01"
@@ -442,10 +442,10 @@ export default function Dashboard() {
                             </div>
                           </td>
                           <td className="table-row-cell font-mono text-xs text-brand-dark/70">
-                            ${r.reVal.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                             ₹{r.reVal.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                           </td>
                           <td className="table-row-cell font-mono font-bold text-sm">
-                            ${r.rowTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                             ₹{r.rowTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                           </td>
                           <td className="table-row-cell text-center">
                             {hasChanged && (
@@ -465,13 +465,13 @@ export default function Dashboard() {
                   {profileSummaryRows.length > 0 && (
                     <tr className="bg-brand-orange/5 font-semibold">
                       <td className="table-row-cell text-brand-orange font-bold">Total Wealth</td>
-                      <td className="table-row-cell font-mono text-xs text-brand-orange/90">${totalStocksCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                      <td className="table-row-cell font-mono text-xs text-brand-orange/90">${totalBankCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                      <td className="table-row-cell font-mono text-xs text-brand-orange/90">${totalPPFCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                      <td className="table-row-cell font-mono text-xs text-brand-orange/90">${totalNPSCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                      <td className="table-row-cell font-mono text-xs text-brand-orange/90">${totalRECurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                      <td className="table-row-cell font-mono text-xs text-brand-orange/90">₹{totalStocksCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                      <td className="table-row-cell font-mono text-xs text-brand-orange/90">₹{totalBankCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                      <td className="table-row-cell font-mono text-xs text-brand-orange/90">₹{totalPPFCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                      <td className="table-row-cell font-mono text-xs text-brand-orange/90">₹{totalNPSCurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                      <td className="table-row-cell font-mono text-xs text-brand-orange/90">₹{totalRECurrent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
                       <td className="table-row-cell font-mono text-base font-extrabold text-brand-orange" colSpan="2">
-                        ${grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        ₹{grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
                     </tr>
                   )}
