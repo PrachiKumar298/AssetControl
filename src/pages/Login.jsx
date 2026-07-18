@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { dbClient } from '../db';
-import { AlertCircle, Eye, EyeOff, TrendingUp, Shield, BarChart3 } from 'lucide-react';
+import { AlertCircle, Eye, EyeOff, TrendingUp, BarChart3 } from 'lucide-react';
 
 const features = [
   { icon: TrendingUp, text: 'Track stocks, PPF, NPS & real estate' },
   { icon: BarChart3, text: 'Visualise your wealth distribution' },
-  { icon: Shield, text: 'Your data, secured with RLS policies' },
 ];
 
 export default function Login({ onSignIn }) {
