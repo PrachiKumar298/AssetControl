@@ -37,6 +37,18 @@ export default function Stocks() {
     fetchData();
   }, []);
 
+  // Auto-refresh live prices every time the page loads or companies change
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const autoRefreshRef = React.useRef(false);
+  useEffect(() => {
+    if (companies.length > 0 && !autoRefreshRef.current) {
+      autoRefreshRef.current = true;
+      handleRefreshPrices();
+    }
+    if (companies.length === 0) autoRefreshRef.current = false;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [companies.length]);
+
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -114,43 +126,58 @@ export default function Stocks() {
     if (newProfile?.id) setSelectedProfileId(newProfile.id);
   };
 
-  const handleRefreshPrices = async () => {
-    if (companies.length === 0) return;
+  const handleRefreshPrices = async (companiesOverride) => {
+    const compList = companiesOverride || companies;
+    if (compList.length === 0) return;
     setRefreshing(true);
     setError('');
     setSuccessMsg('');
     try {
-      // Get unique symbols
-      const symbols = [...new Set(companies.map(c => c.symbol.toUpperCase()))];
-      
-      // Fetch prices from our API in parallel
+      const symbols = [...new Set(compList.map(c => c.symbol.toUpperCase()))];
+
+      // For each symbol: if it has no dot suffix, try SYMBOL.NS first (Indian NSE)
       const pricePromises = symbols.map(async (sym) => {
+        const candidates = sym.includes('.') ? [sym] : [`${sym}.NS`, sym];
+        for (const candidate of candidates) {
+          try {
+            const res = await axios.get(`/api/stocks/price?symbol=${candidate}`);
+            if (res.data?.price && res.data.source !== 'mock') {
+              return { symbol: sym, resolvedSymbol: candidate, price: res.data.price, source: res.data.source };
+            }
+          } catch (e) { /* try next */ }
+        }
+        // All candidates failed or returned mock — return mock from first candidate
         try {
-          const res = await axios.get(`/api/stocks/price?symbol=${sym}`);
-          return { symbol: sym, price: res.data.price };
+          const res = await axios.get(`/api/stocks/price?symbol=${candidates[0]}`);
+          return { symbol: sym, resolvedSymbol: candidates[0], price: res.data.price, source: res.data.source };
         } catch (e) {
-          console.error(`Error fetching price for ${sym}`, e);
-          return { symbol: sym, price: null };
+          return { symbol: sym, resolvedSymbol: sym, price: null, source: 'error' };
         }
       });
 
       const priceResults = await Promise.all(pricePromises);
       const priceMap = {};
+      const resolvedMap = {};
       priceResults.forEach(r => {
         if (r.price !== null) priceMap[r.symbol] = r.price;
+        if (r.resolvedSymbol !== r.symbol) resolvedMap[r.symbol] = r.resolvedSymbol;
       });
 
-      // Update companies with new prices
+      // Update companies: price AND auto-correct symbol to resolved version (e.g. TATASTEEL → TATASTEEL.NS)
       let updatedCount = 0;
-      for (const comp of companies) {
-        const livePrice = priceMap[comp.symbol.toUpperCase()];
-        if (livePrice !== undefined && livePrice !== comp.current_price) {
-          await dbClient.companies.update(comp.id, { current_price: livePrice });
+      for (const comp of compList) {
+        const symKey = comp.symbol.toUpperCase();
+        const livePrice = priceMap[symKey];
+        const resolvedSym = resolvedMap[symKey];
+        if (livePrice !== undefined) {
+          const updates = { current_price: livePrice };
+          if (resolvedSym) updates.symbol = resolvedSym; // fix stored symbol too
+          await dbClient.companies.update(comp.id, updates);
           updatedCount++;
         }
       }
 
-      setSuccessMsg(`Stock prices refreshed. Updated ${updatedCount} records.`);
+      setSuccessMsg(`Live prices updated for ${updatedCount} stock(s). Tip: use SYMBOL.NS for NSE (e.g. TATASTEEL.NS, RELIANCE.NS).`);
       fetchData();
     } catch (err) {
       setError('Failed to refresh stock prices.');
@@ -174,26 +201,32 @@ export default function Stocks() {
 
     setLoading(true);
     try {
-      // Fetch current price for symbol first
-      let currentPrice = avgPrice;
-      try {
-        const res = await axios.get(`/api/stocks/price?symbol=${newSymbol.trim().toUpperCase()}`);
-        if (res.data && res.data.price) {
-          currentPrice = res.data.price;
-        }
-      } catch (e) {
-        console.warn('Could not fetch current price. Defaulting to avg price.', e);
+      // Try to fetch live price — prefer SYMBOL.NS for Indian stocks (NSE)
+      const rawSym = newSymbol.trim().toUpperCase();
+      const candidates = rawSym.includes('.') ? [rawSym] : [`${rawSym}.NS`, rawSym];
+      let currentPrice = 0; // 0 = not yet fetched (will show clearly in UI)
+      let resolvedSymbol = rawSym;
+
+      for (const candidate of candidates) {
+        try {
+          const res = await axios.get(`/api/stocks/price?symbol=${candidate}`);
+          if (res.data?.price && res.data.source !== 'mock') {
+            currentPrice = res.data.price;
+            resolvedSymbol = candidate; // use the symbol that actually worked
+            break;
+          }
+        } catch (e) { /* try next candidate */ }
       }
 
       const { error: err } = await dbClient.companies.create({
         profile_id: selectedProfileId,
-        symbol: newSymbol.trim().toUpperCase(),
+        symbol: resolvedSymbol,          // store the resolved symbol (e.g. TATASTEEL.NS)
         company_name: newCompanyName.trim(),
         nominee: newNominee.trim(),
         bank: newBank.trim(),
         avg_price: avgPrice,
         quantity: quantity,
-        current_price: currentPrice
+        current_price: currentPrice      // 0 if live fetch failed — never equals avg
       });
 
       if (err) {
@@ -205,7 +238,10 @@ export default function Stocks() {
         setNewBank('');
         setNewAvgPrice('');
         setNewQuantity('');
-        setSuccessMsg('Stock added successfully.');
+        const priceMsg = currentPrice > 0
+          ? `Stock added. Live price fetched: ₹${currentPrice.toLocaleString('en-IN')} (${resolvedSymbol})`
+          : `Stock added. Could not fetch live price — click Refresh Prices to try again. Try using symbol like ${rawSym}.NS`;
+        setSuccessMsg(priceMsg);
         fetchData();
       }
     } catch (err) {
